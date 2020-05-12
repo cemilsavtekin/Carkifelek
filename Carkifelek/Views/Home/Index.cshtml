@@ -1,0 +1,95 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Carkifelek</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <div class="row mt-5 mr-5">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="jumbotron">
+                    <h1 class="display-4">Merhaba</h1>
+                    <p class="lead">Ödül kazanmak için butona tıklayınız.</p>
+                    <hr class="my-4">
+                    <p>Gelen sonuca göre puan kazanma butonu açılacaktır </p>
+
+
+                    <div>
+                        <a id="reward" class="btn btn-primary btn-lg" href="#" role="button">Ödül için tıkla</a>
+
+                        <span id="reward_result" class="badge badge-pill badge-success" style="display:none"></span>
+
+                        <p id="information" style="display:none;">Puan almaya hak kazandınız</p>
+
+                    </div>
+
+                    <div id="point_area" style="display:none;">
+                        <a id="point" class="btn btn-primary btn-lg" href="#" role="button">Puan için tıkla</a>
+
+                        <span id="point_result" class="badge badge-pill badge-success" style="display:none"></span>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <script>
+
+        $("#reward").click(function () {
+            debugger;
+            $.ajax(
+                {
+                    async: false,
+                    url: "/Home/GetReward",
+                    contentType: 'application/json',
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.success) {
+                            $("#reward_result").text(result.data.RewardName).show();
+                            if (result.data.IsAllowedForGetPoint) {
+                                $("#point_area,#information").show();
+
+                            }
+                            else $("#point_area,#information").hide();
+                        }
+
+                    },
+                    error: function () { }
+                });
+
+        });
+        $("#point").click(function () {
+            $.ajax(
+                {
+                    async: false,
+                    url: "/Home/GetPoint",
+                    contentType: 'application/json',
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.success) {
+                            $("#point_result").text(result.data.PointRate).show();
+                        }
+                    },
+                    error: function () { }
+                });
+        });
+
+    </script>
+
+</body>
+</html>
